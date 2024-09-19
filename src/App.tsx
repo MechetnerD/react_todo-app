@@ -70,7 +70,7 @@ export const App: React.FC = () => {
         <Main todos={todos} onRemove={handleRemoveTodo} onToggle={toggleTodo} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && <Footer />}
+        {todos.length !== 0 && <Footer todos={todos} />}
       </div>
     </div>
   );

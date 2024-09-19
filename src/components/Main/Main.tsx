@@ -22,7 +22,7 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
         />
       ))}
 
-      <div data-cy="Todo" className="todo completed">
+      {/* <div data-cy="Todo" className="todo completed">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -36,14 +36,14 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
           Completed Todo
         </span>
 
-        {/* Remove button appears only on hover */}
+        // Remove button appears only on hover
         <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
         </button>
-      </div>
+      </div> */}
 
       {/* This todo is an active todo */}
-      <div data-cy="Todo" className="todo">
+{/*       <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -59,10 +59,10 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
         <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
         </button>
-      </div>
+      </div> */}
 
       {/* This todo is being edited */}
-      <div data-cy="Todo" className="todo">
+      {/* <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -79,8 +79,8 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
           ×
         </button>
 
-        {/* This form is shown instead of the title and remove button */}
-        <form>
+        // This form is shown instead of the title and remove button
+        {<form>
           <input
             data-cy="TodoTitleField"
             type="text"
@@ -88,11 +88,11 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
             placeholder="Empty todo will be deleted"
             value="Todo is being edited now"
           />
-        </form>
-      </div>
+        </form>}
+      </div> */}
 
-      {/* This todo is in loadind state */}
-      <div data-cy="Todo" className="todo">
+      {/* This todo is in loading state */}
+      {/* <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -108,7 +108,7 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
         <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
         </button>
-      </div>
+      </div> */}
     </section>
   );
 };
