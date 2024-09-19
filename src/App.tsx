@@ -53,12 +53,19 @@ export const App: React.FC = () => {
     setTodos(updatedTodos);
   };
 
+  const handleAddTodo = (title: string) => {
+    const maxIds = todos.map(todo => todo.id);
+    const id = Math.max(...maxIds) + 1;
+
+    setTodos(prev => [...prev, { id, title, completed: false }]);
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header onAdd={handleAddTodo} />
 
         <Main todos={todos} onRemove={handleRemoveTodo} onToggle={toggleTodo} />
 
