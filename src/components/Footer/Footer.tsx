@@ -1,32 +1,53 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
-  todos: Todo[] 
+  todos: Todo[];
+  filter: string;
+  onFilterSelect: (filter: string) => void;
+  onClearCompleted: () => void;
 };
 
-export const Footer: React.FC<Props> = ({todos}) => {
-  const activeTodos = todos.filter(todo => !todo.completed).length
+export const Footer: React.FC<Props> = ({
+  todos,
+  filter,
+  onFilterSelect,
+  onClearCompleted,
+}) => {
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const hasCompleted = todos.some(t => t.completed);
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-       {activeTodos} items left
+        {activeTodos} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={cn('filter__link', { selected: filter === 'all' })}
+          data-cy="FilterLinkAll"
+          onClick={() => onFilterSelect('all')}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={cn('filter__link', { selected: filter === 'active' })}
+          data-cy="FilterLinkActive"
+          onClick={() => onFilterSelect('active')}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={cn('filter__link', { selected: filter === 'completed' })}
           data-cy="FilterLinkCompleted"
+          onClick={() => onFilterSelect('completed')}
         >
           Completed
         </a>
@@ -37,6 +58,8 @@ export const Footer: React.FC<Props> = ({todos}) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!hasCompleted}
+        onClick={onClearCompleted}
       >
         Clear completed
       </button>

@@ -30,6 +30,7 @@ const todosFromServer = [
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(todosFromServer);
+  const [filter, setFilter] = useState('all');
 
   const handleRemoveTodo = (todoId: number) => {
     const updatedTodos = todos.filter(todo => todo.id !== todoId);
@@ -37,7 +38,7 @@ export const App: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  const toggleTodo = (todoId: number) => {
+  const handleToggleTodo = (todoId: number) => {
     console.log('toggling');
 
     const updatedTodos = todos.map(todo => {
@@ -60,17 +61,69 @@ export const App: React.FC = () => {
     setTodos(prev => [...prev, { id, title, completed: false }]);
   };
 
+  const handleFilterSelect = (filter: string) => {
+    setFilter(filter);
+  };
+
+  const handleToggleAll = (allCompleted: boolean) => {
+    let updatedTodos;
+    if (allCompleted) {
+      updatedTodos = todos.map(t => ({ ...t, completed: false }));
+    } else {
+      updatedTodos = todos.map(t => ({ ...t, completed: true }));
+    }
+
+    setTodos(updatedTodos);
+  };
+
+  const handleClearCompleted = () => {
+    const updatedTodos = todos.filter(t => !t.completed);
+
+    setTodos(updatedTodos);
+  };
+
+  const visibleTodos = todos.filter(todo => {
+    switch (filter) {
+      case 'all':
+        return todo;
+
+      case 'completed':
+        return todo.completed;
+
+      case 'active':
+        return !todo.completed;
+
+      default:
+        return todo;
+    }
+  });
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header onAdd={handleAddTodo} />
+        <Header
+          onAdd={handleAddTodo}
+          todos={todos}
+          toggleAll={handleToggleAll}
+        />
 
-        <Main todos={todos} onRemove={handleRemoveTodo} onToggle={toggleTodo} />
+        <Main
+          todos={visibleTodos}
+          onRemove={handleRemoveTodo}
+          onToggle={handleToggleTodo}
+        />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && <Footer todos={todos} />}
+        {todos.length !== 0 && (
+          <Footer
+            todos={todos}
+            filter={filter}
+            onFilterSelect={handleFilterSelect}
+            onClearCompleted={handleClearCompleted}
+          />
+        )}
       </div>
     </div>
   );
