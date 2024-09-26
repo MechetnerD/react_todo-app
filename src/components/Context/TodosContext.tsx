@@ -1,5 +1,28 @@
-import React, { Context, ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Todo } from '../../types/Todo';
+
+const todosFromServer = [
+  {
+    id: 1,
+    title: 'Learn HTML',
+    completed: true,
+  },
+  {
+    id: 2,
+    title: 'Learn CSS',
+    completed: true,
+  },
+  {
+    id: 3,
+    title: 'Learn JS',
+    completed: true,
+  },
+  {
+    id: 4,
+    title: 'Learn React',
+    completed: false,
+  },
+];
 
 type Props = {
   children: ReactNode;
@@ -8,23 +31,26 @@ type Props = {
 interface TodosContextI {
   todos: Todo[];
   setTodos: CallableFunction;
+  filter: string;
+  setFilter: CallableFunction;
 }
 
-export const TodosContext: TodosContextI = React.createContext({
+export const TodosContext = React.createContext<TodosContextI>({
   todos: [],
   setTodos: () => {},
+  filter: 'all',
+  setFilter: () => {},
 });
 
-const TodosContextProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const handleUpdateTodos = (updatedTodos: Todo[]) => {
-    setTodos(updatedTodos);
-  };
+export const TodosContextProvider: React.FC<Props> = ({ children }) => {
+  const [todos, setTodos] = useState<Todo[]>(todosFromServer);
+  const [filter, setFilter] = useState('all');
 
   const value = {
     todos,
-    setTodos: handleUpdateTodos,
+    setTodos,
+    filter,
+    setFilter,
   };
 
   return (

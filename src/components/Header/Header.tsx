@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React, { useContext, useState } from 'react';
 import cn from 'classnames';
+import { TodosContext } from '../Context/TodosContext';
+import { Todo } from '../../types/Todo';
 
-type Props = {
-  onAdd: (title: string) => void;
-  todos: Todo[];
-  toggleAll: (completed: boolean) => void;
-};
+export const Header: React.FC = () => {
+  const { todos, setTodos } = useContext(TodosContext);
 
-export const Header: React.FC<Props> = ({ onAdd, todos, toggleAll }) => {
+  const handleAddTodo = (title: string) => {
+    const maxIds = todos.map(todo => todo.id);
+    const id = Math.max(...maxIds) + 1;
+
+    setTodos((todos: Todo[]) => [...todos, { id, title, completed: false }]);
+  };
+
+  const handleToggleAll = (allCompleted: boolean) => {
+    let updatedTodos;
+
+    if (allCompleted) {
+      updatedTodos = todos.map(t => ({ ...t, completed: false }));
+    } else {
+      updatedTodos = todos.map(t => ({ ...t, completed: true }));
+    }
+
+    setTodos(updatedTodos);
+  };
+
   const [title, setTitle] = useState('');
   const allCompleted = todos.every(t => t.completed);
+
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
@@ -18,14 +35,14 @@ export const Header: React.FC<Props> = ({ onAdd, todos, toggleAll }) => {
         type="button"
         className={cn('todoapp__toggle-all', { active: allCompleted })}
         data-cy="ToggleAllButton"
-        onClick={() => toggleAll(allCompleted)}
+        onClick={() => handleToggleAll(allCompleted)}
       />
 
       {/* Add a todo on form submit */}
       <form
         onSubmit={e => {
           e.preventDefault();
-          onAdd(title);
+          handleAddTodo(title);
           setTitle('');
         }}
       >

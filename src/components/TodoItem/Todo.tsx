@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
+import { TodosContext } from '../Context/TodosContext';
 
 type Props = {
   todo: Todo;
-  onRemove: (todoid: number) => void; // Callable Function
-  onToggle: (todoid: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, onRemove, onToggle }) => {
-  console.log('rendering todoItem');
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { todos, setTodos } = useContext(TodosContext);
+
+  const handleRemoveTodo = (todoId: number) => {
+    const updatedTodos = todos.filter(todo => todo.id !== todoId);
+
+    setTodos(updatedTodos);
+  };
+
+  const handleToggleTodo = (todoId: number) => {
+    console.log('toggling');
+
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === todoId) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
 
   return (
     <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
@@ -18,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onRemove, onToggle }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onClick={() => onToggle(todo.id)}
+          onClick={() => handleToggleTodo(todo.id)}
         />
       </label>
 
@@ -30,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onRemove, onToggle }) => {
         type="button"
         className="todo__remove"
         data-cy="TodoDelete"
-        onClick={() => onRemove(todo.id)}
+        onClick={() => handleRemoveTodo(todo.id)}
       >
         ×
       </button>

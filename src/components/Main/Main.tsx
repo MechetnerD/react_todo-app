@@ -1,25 +1,32 @@
-import React from 'react';
-import { Todo } from '../../types/Todo';
+import React, { useContext } from 'react';
 import { TodoItem } from '../TodoItem/Todo';
+import { TodosContext } from '../Context/TodosContext';
 
-type Props = {
-  todos: Todo[];
-  onRemove: (todoid: number) => void; // Callable Function
-  onToggle: (todoid: number) => void;
-};
+export const Main: React.FC = () => {
+  const { todos, filter } = useContext(TodosContext);
 
-export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
+  const visibleTodos = todos.filter(todo => {
+    switch (filter) {
+      case 'all':
+        return todo;
+
+      case 'completed':
+        return todo.completed;
+
+      case 'active':
+        return !todo.completed;
+
+      default:
+        return todo;
+    }
+  });
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
 
-      {todos.map(todo => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onRemove={onRemove}
-          onToggle={onToggle}
-        />
+      {visibleTodos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
       ))}
 
       {/* <div data-cy="Todo" className="todo completed">
@@ -43,7 +50,7 @@ export const Main: React.FC<Props> = ({ todos, onRemove, onToggle }) => {
       </div> */}
 
       {/* This todo is an active todo */}
-{/*       <div data-cy="Todo" className="todo">
+      {/*       <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
